@@ -1,0 +1,59 @@
+@use 'sass:color';
+
+body{
+  height: 100vh;
+  width: 100vw;
+}
+.container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+}
+
+.content{
+  width: max(90%, 800px);
+  height: max(40%,500px);
+  background-color: white;
+  display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+#grid-player-one,#grid-player-two {
+  padding:20px;
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(10, 30px);
+  gap: 2px;
+
+}
+$color: lightgray;
+
+.cell {
+  width: 30px;
+  height: 30px;
+
+  font-size: 23px;
+  background-color: $color;
+  user-select: none;
+
+  border: 1px solid #000000;
+  opacity: .8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  transition: all 0.5s ease;
+
+  &:hover{
+    background-color: color.adjust($color, $lightness: -10%);
+    opacity: 1;
+    transition: none;
+  }
+}
