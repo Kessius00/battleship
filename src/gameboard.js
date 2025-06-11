@@ -62,9 +62,8 @@ export class Gameboard {
     if (includesCoord(this.missed, coords)) {
       throw new Error('missed spot is already hit!');
     }
-    // if not hit, mark spot by '@'
-    this.missed.push(coords);
 
+    // test this part \/\/
     // if ship is hit
     for (const ship of this.ships) {
       if (includesCoord(ship.shipCoords, coords)) {
@@ -73,12 +72,40 @@ export class Gameboard {
         }
         // is this all there is?
         ship.hit(coords);
+        return;
       }
     }
+
+    // if not hit, mark spot by '@'
+    this.missed.push(coords);
+  }
+
+  allShipsSunk() {
+    for (const ship of this.ships) {
+      if (ship.sunk === false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   refreshBoard() {
     // place ships
+    let boardCopy = [...this.board];
+    for (const ship of this.ships) {
+      ship.shipCoords.forEach((shipSpot) => {
+        boardCopy[shipSpot[0]][shipSpot[1]] = 'o';
+      });
+      ship.hitCoords.forEach((hittedSpot) => {
+        //overwriting 'o'
+        boardCopy[hittedSpot[0]][hittedSpot[1]] = 'x';
+      });
+    }
+
     // place dropped bombs
+    this.missed.forEach((missedBombSpot) => {
+      boardCopy[missedBombSpot[0]][missedBombSpot[1]] = '@';
+    });
+    return boardCopy;
   }
 }

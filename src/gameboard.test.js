@@ -100,4 +100,33 @@ describe('gameboard validation', () => {
       gameboard.receiveAttack([0, 0]);
     }).toThrow('missed spot is already hit!');
   });
+
+  test('receiveAttack on a ship gives hitCoords of that ship that coord', () => {
+    gameboard.placeInShips(ship);
+    gameboard.receiveAttack([1, 0]);
+    expect(ship.hitCoords).toEqual([[1, 0]]);
+
+    gameboard.receiveAttack([0, 0]);
+    expect(ship.sunk).toBe(false);
+    gameboard.receiveAttack([2, 0]);
+    expect(ship.sunk).toBe(true);
+
+    expect(ship.hitCoords).toEqual([
+      [1, 0],
+      [0, 0],
+      [2, 0],
+    ]);
+    expect(() => {
+      gameboard.receiveAttack([1, 0]);
+    }).toThrow('Ship already hit in this spot!');
+  });
+
+  test('allShipsSunk() method test', () => {
+    gameboard.placeInShips(ship);
+    gameboard.receiveAttack([0, 0]);
+    gameboard.receiveAttack([1, 0]);
+    expect(gameboard.allShipsSunk()).toBe(false);
+    gameboard.receiveAttack([2, 0]);
+    expect(gameboard.allShipsSunk()).toBe(true);
+  });
 });
