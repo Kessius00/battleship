@@ -1,31 +1,59 @@
 import { Ship } from './ship.js';
 
-test('Ship object exists', () => {
-  const length = 2;
-  const ship = new Ship(length);
-  expect(typeof ship).toBe('object');
-  expect(ship.length).toBe(length);
-  expect(ship.hitsTaken).toBe(null);
-  expect(ship.sunk).toBe(false);
-});
+describe('Ship class exists', () => {
+  let ship;
+  beforeEach(() => {
+    ship = new Ship(3);
+    ship.isHorizontal = true;
+    ship.fillShipCoordinates([0, 0]); //[0,0] - [1,0] - [2,0];
+  });
 
-test('hit() increments hitsTaken', () => {
-  const length = 2;
-  const ship = new Ship(length);
-  ship.hit();
+  test('Ship object exists', () => {
+    expect(typeof ship).toBe('object');
+    expect(ship.length).toBe(3);
+    expect(ship.hitsTaken).toBe(0);
+    expect(ship.sunk).toBe(false);
+  });
 
-  expect(ship.hitsTaken).toBe(1);
-});
+  test('hit([1,0]) increments hitsTaken', () => {
+    ship.hit([1, 0]);
+    expect(ship.hitsTaken).toBe(1);
+  });
 
-test('hit() will eventually turn ship.sunk = true', () => {
-  const length = 1;
-  const ship = new Ship(length);
-  const ship2 = new Ship(2);
-  ship.hit();
-  expect(ship.sunk).toBe(true);
+  test('hit([1,0]) increments hitsTaken', () => {
+    ship.hit([1, 0]);
+    expect(ship.hitCoords).toEqual([[1, 0]]);
+  });
 
-  ship2.hit();
-  expect(ship2.sunk).toBe(false);
-  ship2.hit();
-  expect(ship2.sunk).toBe(true);
+  test('hit() x3 makes ship.sunk = true', () => {
+    ship.hit([0, 0]);
+    ship.hit([1, 0]);
+
+    expect(ship.sunk).toBe(false);
+    ship.hit([2, 0]);
+    expect(ship.hitCoords).toEqual([
+      [0, 0],
+      [1, 0],
+      [2, 0],
+    ]);
+
+    expect(ship.sunk).toBe(true);
+  });
+
+  test('containsCoordinates works', () => {
+    expect(ship.containsCoordinates([0, 5])).toBe(false);
+    expect(ship.containsCoordinates([2, 0])).toBe(true);
+  });
+
+  test('hit()', () => {
+    ship.hit([0, 0]);
+
+    expect(ship.hitCoords).toEqual([[0, 0]]);
+
+    expect(ship.containsCoordinates([0, 0], ship.hitCoords)).toBe(true);
+
+    expect(() => {
+      ship.hit([0, 0]);
+    }).toThrow('Location has already been hit!!!');
+  });
 });
