@@ -10,16 +10,26 @@ class Ship {
     this.sunk = false;
   }
 
-  fillShipCoordinates(coords) {
+  fillShipCoordinates(coords, isHorizontal = this.isHorizontal) {
     const [x, y] = coords;
     let coordinates = [];
 
-    if (this.isHorizontal) {
+    if (x < 0 || y < 0) {
+      throw new Error('These coordinates are not possible (x < 0 or y < 0)');
+    }
+
+    if (isHorizontal) {
       for (let i = 0; i < this.length; i++) {
+        // if (x + i > 9) {
+        //   throw new Error('Coordinates not possible: x > 9!');
+        // }
         coordinates.push([x + i, y]);
       }
     } else {
       for (let i = 0; i < this.length; i++) {
+        // if (y + i > 9) {
+        //   throw new Error('Coordinates not possible: y > 9!');
+        // }
         coordinates.push([x, y + i]);
       }
     }
@@ -56,6 +66,14 @@ class Ship {
 
   isSunk() {
     return this.hitsTaken === this.length;
+  }
+
+  constructShip([x, y], currentOrientation) {
+    currentOrientation === 'horizontal'
+      ? (this.isHorizontal = true)
+      : (this.isHorizontal = false);
+
+    this.fillShipCoordinates([x, y]);
   }
 }
 

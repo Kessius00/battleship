@@ -119,6 +119,9 @@ describe('gameboard validation', () => {
     expect(() => {
       gameboard.receiveAttack([1, 0]);
     }).toThrow('Ship already hit in this spot!');
+    expect(() => {
+      gameboard.receiveAttack([1, 0]);
+    }).not.toThrow('missed spot is already hit!');
   });
 
   test('allShipsSunk() method test', () => {
