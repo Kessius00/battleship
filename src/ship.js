@@ -20,16 +20,10 @@ class Ship {
 
     if (isHorizontal) {
       for (let i = 0; i < this.length; i++) {
-        // if (x + i > 9) {
-        //   throw new Error('Coordinates not possible: x > 9!');
-        // }
         coordinates.push([x + i, y]);
       }
     } else {
       for (let i = 0; i < this.length; i++) {
-        // if (y + i > 9) {
-        //   throw new Error('Coordinates not possible: y > 9!');
-        // }
         coordinates.push([x, y + i]);
       }
     }

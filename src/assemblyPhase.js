@@ -2,6 +2,20 @@ import { Gameboard } from './gameboard.js';
 import { Ship } from './ship.js';
 import { Player } from './player.js';
 
+export function placeShipsOnGrid(player, container) {
+  player.gameboard.ships.forEach((ship) => {
+    ship.shipCoords.forEach(([x, y]) => {
+      const cell = container.querySelector(
+        `div.cell[data-row="${y}"][data-col="${x}"]`
+      );
+
+      if (cell) {
+        cell.classList.add(`ship-color`);
+      }
+    });
+  });
+}
+
 export class AssemblyPhase {
   constructor(player) {
     this.player = player;
@@ -51,18 +65,15 @@ export class AssemblyPhase {
         this.finalizeAssembly();
       }
     }
-
-    // if (board.isPlaceValid(ship)) {
-    //   board.placeInShips(ship);
-    //   this.currentShipIndex++; //IDK IF THIS WORKS REGARDING THE SCOPE
-    //   this.fillGridContainer(board.refreshBoard(), grid);
-    //   this.enableShipHover(grid, board, ships); // Rebind since you rerendered
-    // }
   }
   //player is called here
   finalizeAssembly() {
-    //
-    player.gameboard = this.assemblyBoard;
+    const gridOneContainer = document.getElementById('grid-player-one');
+
+    this.player.gameboard = this.assemblyBoard;
+
+    placeShipsOnGrid(this.player, gridOneContainer);
+    console.log('hello');
 
     // randomize computer locations!
 
@@ -112,12 +123,3 @@ export class AssemblyPhase {
     });
   }
 }
-
-const computer = new Player('Computer');
-computer.gameboard.computerPlaceRandomShips();
-
-const player = new Player('Kes');
-// player.gameboard.refreshBoard()
-const assemble = new AssemblyPhase(player);
-assemble.addOrientationButtonListener();
-assemble.enableShipHover();

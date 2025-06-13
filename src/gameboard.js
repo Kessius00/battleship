@@ -109,10 +109,12 @@ export class Gameboard {
   receiveAttack([x, y]) {
     // within boundaries
     if (x > 9 || x < 0 || y > 9 || y < 0) {
-      throw new Error('Coordinates are out of bounds (0-9)!');
+      // throw new Error('Coordinates are out of bounds (0-9)!');
+      return;
     }
     if (this.arrayIncludesCoordinate(this.missed, [x, y])) {
-      throw new Error('missed spot is already hit!');
+      // throw new Error('missed spot is already hit!');
+      return;
     }
 
     // test this part \/\/
@@ -120,18 +122,20 @@ export class Gameboard {
     for (const ship of this.ships) {
       if (this.arrayIncludesCoordinate(ship.shipCoords, [x, y])) {
         if (this.arrayIncludesCoordinate(ship.hitCoords, [x, y])) {
-          throw new Error('Ship already hit in this spot!');
+          // throw new Error('Ship already hit in this spot!');
+          return;
         }
         // is this all there is?
         ship.hit([x, y]);
         // add hit class to cell!!!!!! HEREEEEEEE
-        return;
+        return true;
       }
     }
 
     // if not hit, mark spot by '@'
     // MISSED CLASS TO CELL
     this.missed.push([x, y]);
+    return false;
   }
 
   allShipsSunk() {
